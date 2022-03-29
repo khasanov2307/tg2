@@ -5,7 +5,7 @@ from telebot import types
 from Info import info
 import logging
 
-bot = telebot.TeleBot("5111751267:AAEid2oqxT2EjT_c2YEC_ja7_-fYQlEpEns")
+bot = telebot.TeleBot("5228869318:AAFSvDkchvWAJg2GpJ1yHxBaTyEWxmE4Omg")
 conn = sqlite3.connect('price.db', check_same_thread=False)
 cursor = conn.cursor()
 print("Bot started")
@@ -56,10 +56,9 @@ def show_cart(message):
     inMurkup.add(types.InlineKeyboardButton(text="Очистить корзину", callback_data="clear"))
     bot.send_message(message.chat.id, cart, reply_markup=inMurkup)
 
-
 def show_categories(message):
     inMurkup = types.InlineKeyboardMarkup(row_width=2)
-    cursor.execute("select distinct category from products")
+    cursor.execute("select distinct category from products order by category ASC")
     conn.commit()
     categories = cursor.fetchall()
     print(categories)
@@ -73,7 +72,6 @@ def show_categories(message):
 @bot.callback_query_handler(func=lambda c: c.data and c.data.startswith("category_"))
 def callback_answer(callback_query: types.CallbackQuery):
     print(callback_query.from_user.id)
-    print("work")
     category = callback_query.data.split("_")[1]
     cursor.execute(f"SELECT id, name, price FROM products where category = '{category}'")
     conn.commit()
@@ -107,12 +105,16 @@ def add_to(callback_query: types.CallbackQuery):
     print(callback_query.from_user.id)
     cursor.execute("INSERT INTO shopping_cart (user_id, product_id) VALUES(?, ?)",
                    (callback_query.from_user.id, product_id))
+    bot.answer_callback_query(callback_query.id, text="Товар добавлен в корзину")
     conn.commit()
 
 
 @bot.callback_query_handler(func=lambda c: c.data == "clear")
 def clear(callback_query: types.CallbackQuery):
     cursor.execute(f"DELETE FROM shopping_cart WHERE user_id = {callback_query.from_user.id}")
+    bot.answer_callback_query(callback_query.id, text="Корзина очищена")
+    bot.delete_message(chat_id=callback_query.message.chat.id,
+                       message_id=callback_query.message.message_id)
     conn.commit()
 
 
