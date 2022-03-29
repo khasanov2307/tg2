@@ -5,8 +5,8 @@ from telebot import types
 from Info import info
 import logging
 
-bot = telebot.TeleBot("5116135377:AAHzci9w9tHAt3NYle_bjUnVuCJGQTEOq-c")
-conn = sqlite3.connect('db_bot', check_same_thread=False)
+bot = telebot.TeleBot("5111751267:AAEid2oqxT2EjT_c2YEC_ja7_-fYQlEpEns")
+conn = sqlite3.connect('price.db', check_same_thread=False)
 cursor = conn.cursor()
 print("Bot started")
 
@@ -47,7 +47,7 @@ def handle_text(message):
 
 
 def show_cart(message):
-    cursor.execute(f"select products.name, products.price from shopping_cart join products on "
+    cursor.execute(f"select products.name, products.price.db from shopping_cart join products on "
                    f"shopping_cart.product_id = products.id where user_id = '{message.from_user.id}'")
     conn.commit()
     cart = cursor.fetchall()
@@ -73,7 +73,7 @@ def show_categories(message):
 def callback_answer(callback_query: types.CallbackQuery):
     print(callback_query.from_user.id)
     category = callback_query.data.split("_")[1]
-    cursor.execute(f"SELECT id, name, price FROM products where category = '{category}'")
+    cursor.execute(f"SELECT id, name, price.db FROM products where category = '{category}'")
     conn.commit()
     result = cursor.fetchall()
     string = '\n'.join(f'{item[0]}.{item[1]}\nЦена {item[2]}₽\n' for item in result)
