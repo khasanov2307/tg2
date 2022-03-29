@@ -1,6 +1,5 @@
 import sqlite3
 import telebot
-from pip._vendor.rich import traceback
 from telebot import types
 
 from Info import info
