@@ -1,5 +1,6 @@
 import sqlite3
 import telebot
+from pip._vendor.rich import traceback
 from telebot import types
 
 from Info import info
@@ -47,7 +48,7 @@ def handle_text(message):
 
 
 def show_cart(message):
-    cursor.execute(f"select products.name, products.price.db from shopping_cart join products on "
+    cursor.execute(f"select products.name, products.price from shopping_cart join products on "
                    f"shopping_cart.product_id = products.id where user_id = '{message.from_user.id}'")
     conn.commit()
     cart = cursor.fetchall()
@@ -62,6 +63,7 @@ def show_categories(message):
     cursor.execute("select distinct category from products")
     conn.commit()
     categories = cursor.fetchall()
+    print(categories)
     buttons = []
     for category in categories:
         buttons.append(types.InlineKeyboardButton(category[0], callback_data=f'category_{category[0]}'))
@@ -72,10 +74,12 @@ def show_categories(message):
 @bot.callback_query_handler(func=lambda c: c.data and c.data.startswith("category_"))
 def callback_answer(callback_query: types.CallbackQuery):
     print(callback_query.from_user.id)
+    print("work")
     category = callback_query.data.split("_")[1]
-    cursor.execute(f"SELECT id, name, price.db FROM products where category = '{category}'")
+    cursor.execute(f"SELECT id, name, price FROM products where category = '{category}'")
     conn.commit()
     result = cursor.fetchall()
+    print(result)
     string = '\n'.join(f'{item[0]}.{item[1]}\nЦена {item[2]}₽\n' for item in result)
     keyboard = types.InlineKeyboardMarkup(row_width=5)
     cursor.execute(f"select id from products where category = '{category}'")
