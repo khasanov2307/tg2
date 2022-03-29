@@ -5,7 +5,7 @@ from telebot import types
 from Info import info
 import logging
 
-bot = telebot.TeleBot("5228869318:AAFSvDkchvWAJg2GpJ1yHxBaTyEWxmE4Omg")
+bot = telebot.TeleBot("5111751267:AAEid2oqxT2EjT_c2YEC_ja7_-fYQlEpEns")
 conn = sqlite3.connect('price.db', check_same_thread=False)
 cursor = conn.cursor()
 print("Bot started")
