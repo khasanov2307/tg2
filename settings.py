@@ -1,4 +1,4 @@
-API_KEY = '5228869318:AAEU-vgQ5Evp6W_lAeFB-dtO8AydusZxNvY'
+API_KEY = '5111751267:AAEid2oqxT2EjT_c2YEC_ja7_-fYQlEpEns'
 
 DEBUG = True
 
