@@ -15,6 +15,7 @@ if DEBUG:
 
 cache = 0
 
+
 @bot.message_handler(commands=['start'])
 def send_welcome(message):
     markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
@@ -57,6 +58,7 @@ def show_cart(message):
     inMurkup.add(types.InlineKeyboardButton(text="Очистить корзину", callback_data="clear"))
     bot.send_message(message.chat.id, cart, reply_markup=inMurkup)
 
+
 def show_categories(message):
     inMurkup = types.InlineKeyboardMarkup(row_width=2)
     cursor.execute("select distinct category from products order by category ASC")
@@ -67,7 +69,7 @@ def show_categories(message):
     for category in categories:
         buttons.append(types.InlineKeyboardButton(category[0], callback_data=f'category_{category[0]}'))
     inMurkup.add(*buttons)
-    bot.send_message(message.chat.id, "Категории", reply_markup=inMurkup)
+    bot.send_message(message.chat.id, "Категории (Актуальный прайс на 29.03.2022)", reply_markup=inMurkup)
 
 
 @bot.callback_query_handler(func=lambda c: c.data and c.data.startswith("category_"))
@@ -114,6 +116,7 @@ def add_to(callback_query: types.CallbackQuery):
     bot.send_message(callback_query.from_user.id, 'Введите количество',reply_markup=keyboard)
     conn.commit()
 
+
 @bot.callback_query_handler(func=lambda c: c.data and c.data.startswith("cart"))
 def check(callback_query: types.CallbackQuery):
     callback = callback_query.data.split('_')
@@ -142,7 +145,6 @@ def check(callback_query: types.CallbackQuery):
     keyboard.add(*buttons)
     keyboard.add(types.InlineKeyboardButton(text="Отправить️", callback_data=f"cart_send_{count_product}_{product_id}"))
     bot.edit_message_text('Введите количество', callback_query.from_user.id, callback_query.message.message_id, reply_markup=keyboard)
-
 
 
 @bot.callback_query_handler(func=lambda c: c.data == "clear")
