@@ -2,18 +2,18 @@ import sqlite3
 import telebot
 from telebot import types
 
-from Info import info
+from settings import API_KEY, DEBUG, info
 import logging
 
-bot = telebot.TeleBot("5111751267:AAEid2oqxT2EjT_c2YEC_ja7_-fYQlEpEns")
+bot = telebot.TeleBot(API_KEY)
 conn = sqlite3.connect('price.db', check_same_thread=False)
 cursor = conn.cursor()
-print("Bot started")
 
+if DEBUG:
+    logger = telebot.logger
+    telebot.logger.setLevel(logging.DEBUG)
 
-# logger = telebot.logger
-# telebot.logger.setLevel(logging.DEBUG)
-
+cache = 0
 
 @bot.message_handler(commands=['start'])
 def send_welcome(message):
@@ -47,11 +47,12 @@ def handle_text(message):
 
 
 def show_cart(message):
-    cursor.execute(f"select products.name, products.price from shopping_cart join products on "
-                   f"shopping_cart.product_id = products.id where user_id = '{message.from_user.id}'")
+    cursor.execute(
+        f'select products.name, count(*)*products.price, count(*), price from shopping_cart'
+        f' join products on shopping_cart.product_id = products.id where user_id=\'{message.from_user.id}\' group by products.id')
     conn.commit()
     cart = cursor.fetchall()
-    cart = '\n'.join(f'{item[0]}\nЦена {item[1]}₽\n' for item in cart)
+    cart = '\n'.join(f'{item[0]}\nКоличество:{item[2]}\nЦена за ед.:{item[3]}\nОбщая сумма:{item[1]}₽\n' for item in cart)
     inMurkup = types.InlineKeyboardMarkup(row_width=1)
     inMurkup.add(types.InlineKeyboardButton(text="Очистить корзину", callback_data="clear"))
     bot.send_message(message.chat.id, cart, reply_markup=inMurkup)
@@ -103,10 +104,45 @@ def back_to_menu(callback_query: types.CallbackQuery):
 def add_to(callback_query: types.CallbackQuery):
     product_id = callback_query.data.split("_")[1]
     print(callback_query.from_user.id)
-    cursor.execute("INSERT INTO shopping_cart (user_id, product_id) VALUES(?, ?)",
-                   (callback_query.from_user.id, product_id))
-    bot.answer_callback_query(callback_query.id, text="Товар добавлен в корзину")
+    buttons = []
+    buttons.append(types.InlineKeyboardButton(text='-', callback_data=f"cart_-_1_{product_id}"))
+    buttons.append(types.InlineKeyboardButton(text=f'1', callback_data="cart_count_1"))
+    buttons.append(types.InlineKeyboardButton(text='+', callback_data=f"cart_+_1_{product_id}"))
+    keyboard = types.InlineKeyboardMarkup(row_width=3)
+    keyboard.add(*buttons)
+    keyboard.add(types.InlineKeyboardButton(text="Отправить️", callback_data=f"cart_send_1_{product_id}"))
+    bot.send_message(callback_query.from_user.id, 'Введите количество',reply_markup=keyboard)
     conn.commit()
+
+@bot.callback_query_handler(func=lambda c: c.data and c.data.startswith("cart"))
+def check(callback_query: types.CallbackQuery):
+    callback = callback_query.data.split('_')
+    buttons = []
+    count_product = callback[2]
+    product_id = callback[3]
+    if callback[1] == 'send':
+        for i in range(int(count_product)):
+            print(count_product)
+            cursor.execute("INSERT INTO shopping_cart (user_id, product_id) VALUES(?, ?)",
+                                    (callback_query.from_user.id, int(product_id)))
+        bot.edit_message_text('Продукт добавлен в корзину', callback_query.from_user.id, callback_query.message.message_id)
+        conn.commit()
+        return
+    if callback[1] == '+':
+        count_product = int(count_product) + 1
+    elif callback[1] == '-':
+        if int(count_product) <= 0:
+            bot.send_message(callback_query.from_user.id, '<0')
+            return
+        count_product = int(count_product) - 1
+    buttons.append(types.InlineKeyboardButton(text='-', callback_data=f"cart_-_{count_product}_{product_id}"))
+    buttons.append(types.InlineKeyboardButton(text=f'{count_product}', callback_data="cart_count_1"))
+    buttons.append(types.InlineKeyboardButton(text='+', callback_data=f"cart_+_{count_product}_{product_id}"))
+    keyboard = types.InlineKeyboardMarkup(row_width=3)
+    keyboard.add(*buttons)
+    keyboard.add(types.InlineKeyboardButton(text="Отправить️", callback_data=f"cart_send_{count_product}_{product_id}"))
+    bot.edit_message_text('Введите количество', callback_query.from_user.id, callback_query.message.message_id, reply_markup=keyboard)
+
 
 
 @bot.callback_query_handler(func=lambda c: c.data == "clear")
