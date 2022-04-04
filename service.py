@@ -15,7 +15,7 @@ def show_categories(message):
 def show_cart(message):
     cart = show_user_cart(message)
     string_cart = '\n'.join(f'{item[0]}\nКоличество:{item[2]}'
-                            f'\nЦена за ед.:{item[3]}'
+                            f'\nЦена за ед.:{item[3]}₽'
                             f'\nОбщая сумма:{item[1]}₽'
                             f'\n' for item in cart)
     bot.send_message(message.chat.id, string_cart, reply_markup=keyboards_cart_clear())

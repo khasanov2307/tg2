@@ -19,8 +19,9 @@ def add_to_stage(callback_query: types.CallbackQuery):
     product_id = callback[3]
     if operand == 'send':
         add_product(count_product, callback_query, product_id)
-        bot.edit_message_text('Продукт добавлен в корзину', callback_query.from_user.id,
-                              callback_query.message.message_id)
+        bot.answer_callback_query(callback_query.id, text='Товар добавлен в корзину🛒')
+        bot.delete_message(chat_id=callback_query.message.chat.id,
+                           message_id=callback_query.message.message_id)
         return
     if operand == '+':
         count_product = int(count_product) + 1
