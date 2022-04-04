@@ -8,7 +8,7 @@ from keyboards.inline.cart import keyboards_cart_clear
 def show_categories(message):
     categories = show_category()
     keyboard = keyboards_categories(categories)
-    bot.send_message(message.chat.id, "Категории", reply_markup=keyboard)
+    bot.send_message(message.chat.id, "Категории (Актуальный прайс на 4.04.2022)", reply_markup=keyboard)
 
 
 def show_cart(message):
