@@ -3,12 +3,13 @@ from db.cart import show_user_cart
 from loader import bot
 from keyboards.inline.categories import keyboards_categories
 from keyboards.inline.cart import keyboards_cart_clear
+from settings import date
 
 
 def show_categories(message):
     categories = show_category()
     keyboard = keyboards_categories(categories)
-    bot.send_message(message.chat.id, "Категории (Актуальный прайс на 4.04.2022)", reply_markup=keyboard)
+    bot.send_message(message.chat.id, "Категории. Актуальный прайс на "+date, reply_markup=keyboard)
 
 
 def show_cart(message):

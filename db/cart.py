@@ -12,7 +12,7 @@ def show_user_cart(message):
 
 def add_product(count_product, callback_query, product_id):
     for i in range(int(count_product)):
-        print(count_product)
+        #print(count_product)
         cursor.execute("INSERT INTO shopping_cart (user_id, product_id) VALUES(?, ?)",
                        (callback_query.from_user.id, int(product_id)))
     conn.commit()
