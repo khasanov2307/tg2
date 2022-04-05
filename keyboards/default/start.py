@@ -6,4 +6,5 @@ def keyboard_start():
     info = types.KeyboardButton("Информация")
     catalog = types.KeyboardButton("Каталог")
     cart = types.KeyboardButton("Корзина")
-    return markup.add(info, catalog, cart)
+    search = types.KeyboardButton("Поиск")
+    return markup.add(info, search, cart, catalog)
