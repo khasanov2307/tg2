@@ -38,4 +38,7 @@ def send_info(message):
     tmp = message.text
     users = search_users()
     for user in users:
-        bot.send_message(f'{user[0]}', tmp)
+        try:
+            bot.send_message(f'{user[0]}', tmp)
+        except:
+            pass
