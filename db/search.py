@@ -7,3 +7,9 @@ def search_products(name_product1, name_product2):
                    f"like '%{name_product2}%'")
     conn.commit()
     return cursor.fetchall()
+
+
+def search_users():
+    cursor.execute(f"select user_id from users")
+    conn.commit()
+    return cursor.fetchall()
