@@ -3,7 +3,9 @@ from telebot import types
 
 def keyboards_cart_clear():
     markup = types.InlineKeyboardMarkup(row_width=1)
-    markup.add(types.InlineKeyboardButton(text="Очистить корзину", callback_data="clear"))
+    clear_button = types.InlineKeyboardButton(text="Очистить корзину", callback_data="clear")
+    url_button = types.InlineKeyboardButton(text="Перейти в чат с менеджером", url="https://wa.me/79141581222")
+    markup.add(url_button, clear_button)
     return markup
 
 
