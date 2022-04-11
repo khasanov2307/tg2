@@ -1,7 +1,7 @@
 from loader import bot
 from db.start import db_start
 from keyboards.default.start import keyboard_start
-from service import output_search
+from service import output_search, send_info
 
 name_product = str("")
 
@@ -17,5 +17,12 @@ def send_welcome(message):
 @bot.message_handler(commands=['search'])
 def search(message):
     send = bot.send_message(message.from_user.id,
-                            "Введите слово или словосочетание для поиска товара:")
+                            "Введите слово  для поиска товара:")
     bot.register_next_step_handler(send, output_search)
+
+
+@bot.message_handler(commands=['info'])
+def info_from_users(message):
+    send = bot.send_message(message.from_user.id,
+                            "Ввод")
+    bot.register_next_step_handler(send, send_info)
