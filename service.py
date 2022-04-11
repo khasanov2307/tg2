@@ -1,6 +1,6 @@
 from db.category import show_category
 from db.cart import show_user_cart
-from db.search import search_products
+from db.search import search_products, search_users
 from loader import bot
 from keyboards.inline.categories import keyboards_categories, keyboards_id_product
 from keyboards.inline.cart import keyboards_cart_clear
@@ -29,5 +29,13 @@ def output_search(message):
     name_product1 = name_product.lower()
     name_product2 = name_product.title()
     products = search_products(name_product1, name_product2)
-    string = '\n'.join(f'{product[0]}.{product[1]}\nКатегория:{product[2]}\nЦена {product[3]}₽\n' for product in products)
+    string = '\n'.join(
+        f'{product[0]}.{product[1]}\nКатегория:{product[2]}\nЦена {product[3]}₽\n' for product in products)
     bot.send_message(message.from_user.id, string, reply_markup=keyboard)
+
+
+def send_info(message):
+    tmp = message.text
+    users = search_users()
+    for user in users:
+        bot.send_message(f'{user[0]}', tmp)
