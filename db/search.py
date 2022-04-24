@@ -13,3 +13,9 @@ def search_users():
     cursor.execute(f"select user_id from users")
     conn.commit()
     return cursor.fetchall()
+
+
+def count_users():
+    cursor.execute(f"select count(*) from users")
+    conn.commit()
+    return cursor.fetchone()

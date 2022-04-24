@@ -1,10 +1,8 @@
+from db.search import count_users
 from loader import bot
 from db.start import db_start
 from keyboards.default.start import keyboard_start
 from service import output_search, send_info
-
-name_product = str("")
-
 
 @bot.message_handler(commands=['start'])
 def send_welcome(message):
@@ -26,3 +24,9 @@ def info_from_users(message):
     send = bot.send_message(message.from_user.id,
                             "Ввод")
     bot.register_next_step_handler(send, send_info)
+
+
+@bot.message_handler(commands=['count'])
+def count(message):
+    count = count_users()
+    bot.send_message(message.from_user.id, f"Количество пользователей: {count[0]}")

@@ -42,3 +42,4 @@ def send_info(message):
             bot.send_message(f'{user[0]}', tmp)
         except:
             pass
+
