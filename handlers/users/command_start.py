@@ -4,6 +4,7 @@ from db.start import db_start
 from keyboards.default.start import keyboard_start
 from service import output_search, send_info
 
+
 @bot.message_handler(commands=['start'])
 def send_welcome(message):
     bot.send_message(message.from_user.id,

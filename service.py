@@ -5,6 +5,7 @@ from loader import bot
 from keyboards.inline.categories import keyboards_categories, keyboards_id_product
 from keyboards.inline.cart import keyboards_cart_clear
 from settings import date
+import datetime
 
 
 def show_categories(message):
@@ -43,3 +44,10 @@ def send_info(message):
         except:
             pass
 
+
+def logging_history(message):
+    dtn = datetime.datetime.now()
+    f = open('log.txt', 'a')
+    f.write(dtn.strftime("%d-%m-%Y %H:%M") + " " + str(message.from_user.id) + " " + str(message.from_user.first_name)
+            + " " + str(message.from_user.last_name) + " " + str(message.text) + "\n")
+    f.close()
