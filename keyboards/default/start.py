@@ -8,4 +8,5 @@ def keyboard_start():
     cart = types.KeyboardButton("Корзина")
     search = types.KeyboardButton("Поиск")
     sales = types.KeyboardButton("Акции и Скидки")
-    return markup.add(info, search, cart, sales, catalog)
+    price = types.KeyboardButton("Скачать Прайс")
+    return markup.add(info, search, cart, sales, catalog, price)

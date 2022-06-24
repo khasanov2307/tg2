@@ -23,6 +23,11 @@ def show_cart(message):
     bot.send_message(message.chat.id, string_cart, reply_markup=keyboards_cart_clear())
 
 
+def send_price(message):
+    f = open("file.xlsx", "rb")
+    bot.send_document(message.chat.id, f)
+
+
 def output_search(message):
     name_product = message.text
     products = search_products(name_product1=name_product.lower(), name_product2=name_product.title())

@@ -1,6 +1,6 @@
 from db.start import db_start
 from loader import bot
-from service import show_categories, show_cart, logging_history
+from service import show_categories, show_cart, logging_history, send_price
 from settings import info, sales
 from handlers.users.command_start import search
 
@@ -23,5 +23,7 @@ def handle_text(message):
     elif message.text.strip() == 'Акции и Скидки':
         bot.send_message(message.chat.id, sales)
         logging_history(message)
+    elif message.text.strip() == 'Скачать Прайс':
+        send_price(message)
     else:
         bot.send_message(message.chat.id, "Ошибка")
