@@ -1,8 +1,7 @@
-from db.search import count_users
+from keyboards.default.start import keyboard_start
 from loader import bot
 from db.start import db_start
-from keyboards.default.start import keyboard_start
-from service import output_search, send_info, log_in
+from service import output_search, log_in
 
 
 @bot.message_handler(commands=['start'])
@@ -18,19 +17,6 @@ def search(message):
     send = bot.send_message(message.from_user.id,
                             "Введите слово  для поиска товара:")
     bot.register_next_step_handler(send, output_search)
-
-
-@bot.message_handler(commands=['info'])
-def info_from_users(message):
-    send = bot.send_message(message.from_user.id,
-                            "Ввод")
-    bot.register_next_step_handler(send, send_info)
-
-
-@bot.message_handler(commands=['count'])
-def count(message):
-    count = count_users()
-    bot.send_message(message.from_user.id, f"Количество пользователей: {count[0]}")
 
 
 @bot.message_handler(commands=['admin'])

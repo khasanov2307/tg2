@@ -1,11 +1,13 @@
 from db.category import show_category
 from db.cart import show_user_cart
 from db.search import search_products, search_users, search_id, change_price
-from loader import bot
+from keyboards.inline.administration import keyboards_change2, keyboards_change
+from keyboards.inline.cart import keyboards_cart_clear
 from keyboards.inline.categories import keyboards_categories, keyboards_id_product
-from keyboards.inline.cart import keyboards_cart_clear, keyboards_change, keyboards_change2
+from loader import bot
 from settings import date
 import datetime
+from settings import secure_pswd
 
 
 def show_categories(message):
@@ -24,7 +26,7 @@ def show_cart(message):
 
 
 def send_price(message):
-    f = open("file.xlsx", "rb")
+    f = open("price.xlsx", "rb")
     bot.send_document(message.chat.id, f)
 
 
@@ -53,7 +55,7 @@ def output_id(message):
 
 def log_in(message):
     password = message.text
-    if password == "vl1209":
+    if password == secure_pswd:
         keyboard = keyboards_change()
         bot.send_message(message.from_user.id, "Администирование", reply_markup=keyboard)
     else:
@@ -62,10 +64,13 @@ def log_in(message):
 
 def set_price(message):
     new_price = message.text
-    change_price(new_price, product_id)
-    keyboard = keyboards_change()
-    bot.send_message(message.from_user.id, text="Цена изменена")
-    bot.send_message(message.from_user.id, text="Администирование", reply_markup=keyboard)
+    if new_price.isdigit():
+        change_price(new_price, product_id)
+        keyboard = keyboards_change()
+        bot.send_message(message.from_user.id, text="Цена изменена")
+        bot.send_message(message.from_user.id, text="Администирование", reply_markup=keyboard)
+    else:
+        bot.send_message(message.from_user.id, text="Некорректная цена")
 
 
 def send_info(message):

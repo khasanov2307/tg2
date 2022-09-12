@@ -2,7 +2,7 @@ from db.start import db_start
 from loader import bot
 from service import show_categories, show_cart, logging_history, send_price
 from settings import info, sales
-from handlers.users.command_start import search
+from handlers.users.commands import search
 
 
 @bot.message_handler(content_types=["text"])

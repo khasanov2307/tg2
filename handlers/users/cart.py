@@ -1,10 +1,7 @@
 from telebot import types
-
-from db.search import count_users
 from loader import bot
 from db.cart import add_product, clear_cart
 from keyboards.inline.cart import keyboards_cart_add
-from service import set_price, output_id
 
 
 @bot.callback_query_handler(func=lambda c: c.data and c.data.startswith("bascket"))
@@ -41,31 +38,5 @@ def add_to_stage(callback_query: types.CallbackQuery):
 def clear(callback_query: types.CallbackQuery):
     clear_cart(callback_query)
     bot.answer_callback_query(callback_query.id, text="Корзина очищена")
-    bot.delete_message(chat_id=callback_query.message.chat.id,
-                       message_id=callback_query.message.message_id)
-
-
-@bot.callback_query_handler(func=lambda c: c.data == "change")
-def insert_price(callback_query: types.CallbackQuery):
-    send = bot.send_message(callback_query.from_user.id,
-                            "Введите id:")
-    bot.register_next_step_handler(send, output_id)
-
-
-@bot.callback_query_handler(func=lambda c: c.data == "change2")
-def insert_price(callback_query: types.CallbackQuery):
-    send = bot.send_message(callback_query.from_user.id,
-                            "Новая цена:")
-    bot.register_next_step_handler(send, set_price)
-
-
-@bot.callback_query_handler(func=lambda c: c.data == "count_users")
-def send_count(callback_query: types.CallbackQuery):
-    count = count_users()
-    bot.send_message(callback_query.from_user.id, f"Количество пользователей: {count[0]}")
-
-
-@bot.callback_query_handler(func=lambda c: c.data == "exit")
-def clear(callback_query: types.CallbackQuery):
     bot.delete_message(chat_id=callback_query.message.chat.id,
                        message_id=callback_query.message.message_id)
