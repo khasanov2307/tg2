@@ -53,7 +53,7 @@ def output_id(message):
 
 def log_in(message):
     password = message.text
-    if password == "admin":
+    if password == "vl1209":
         keyboard = keyboards_change()
         bot.send_message(message.from_user.id, "Администирование", reply_markup=keyboard)
     else:
