@@ -57,7 +57,7 @@ def log_in(message):
     password = message.text
     if password == secure_pswd:
         keyboard = keyboards_change()
-        bot.send_message(message.from_user.id, "Администирование", reply_markup=keyboard)
+        bot.send_message(message.from_user.id, "Админ-панель", reply_markup=keyboard)
     else:
         bot.send_message(message.from_user.id, "Неправильный пароль")
 
@@ -68,7 +68,7 @@ def set_price(message):
         change_price(new_price, product_id)
         keyboard = keyboards_change()
         bot.send_message(message.from_user.id, text="Цена изменена")
-        bot.send_message(message.from_user.id, text="Администирование", reply_markup=keyboard)
+        bot.send_message(message.from_user.id, text="Админ-панель", reply_markup=keyboard)
     else:
         bot.send_message(message.from_user.id, text="Некорректная цена")
 
