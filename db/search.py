@@ -9,6 +9,17 @@ def search_products(name_product1, name_product2):
     return cursor.fetchall()
 
 
+def search_id(product_id):
+    cursor.execute(f"select id, name, category, price from products WHERE products.id = '{product_id}'")
+    conn.commit()
+    return cursor.fetchall()
+
+
+def change_price(new_price, product_id):
+    cursor.execute(f"update products set price = {new_price} where id = {product_id}")
+    conn.commit()
+
+
 def search_users():
     cursor.execute(f"select user_id from users")
     conn.commit()

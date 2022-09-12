@@ -1,9 +1,9 @@
 from db.category import show_category
 from db.cart import show_user_cart
-from db.search import search_products, search_users
+from db.search import search_products, search_users, search_id, change_price
 from loader import bot
 from keyboards.inline.categories import keyboards_categories, keyboards_id_product
-from keyboards.inline.cart import keyboards_cart_clear
+from keyboards.inline.cart import keyboards_cart_clear, keyboards_change, keyboards_change2
 from settings import date
 import datetime
 
@@ -38,6 +38,34 @@ def output_search(message):
     string = '\n'.join(
         f'{product[0]}.{product[1]}\nКатегория:{product[2]}\nЦена {product[3]}₽\n' for product in products)
     bot.send_message(message.from_user.id, string, reply_markup=keyboard)
+
+
+def output_id(message):
+    global product_id
+    product_id = message.text
+    products = search_id(product_id)
+    keyboard = keyboards_change2()
+    string = '\n'.join(
+        f'{product[0]}.{product[1]}\nКатегория:{product[2]}\nЦена {product[3]}₽\n' for product in products)
+    bot.send_message(message.from_user.id, string, reply_markup=keyboard)
+    return product_id
+
+
+def log_in(message):
+    password = message.text
+    if password == "admin":
+        keyboard = keyboards_change()
+        bot.send_message(message.from_user.id, "Администирование", reply_markup=keyboard)
+    else:
+        bot.send_message(message.from_user.id, "Неправильный пароль")
+
+
+def set_price(message):
+    new_price = message.text
+    change_price(new_price, product_id)
+    keyboard = keyboards_change()
+    bot.send_message(message.from_user.id, text="Цена изменена")
+    bot.send_message(message.from_user.id, text="Администирование", reply_markup=keyboard)
 
 
 def send_info(message):

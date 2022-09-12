@@ -2,7 +2,7 @@ from db.search import count_users
 from loader import bot
 from db.start import db_start
 from keyboards.default.start import keyboard_start
-from service import output_search, send_info
+from service import output_search, send_info, log_in
 
 
 @bot.message_handler(commands=['start'])
@@ -31,3 +31,10 @@ def info_from_users(message):
 def count(message):
     count = count_users()
     bot.send_message(message.from_user.id, f"Количество пользователей: {count[0]}")
+
+
+@bot.message_handler(commands=['admin'])
+def admin_service(message):
+    send = bot.send_message(message.from_user.id,
+                            "Введите пароль:")
+    bot.register_next_step_handler(send, log_in)
