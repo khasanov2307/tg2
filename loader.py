@@ -1,12 +1,17 @@
-import telebot
-import logging
-from settings import API_KEY, DEBUG
+"""
+    Обекты бота и диспетчера создаются в этом файле, чтобы
+    удобно их импортировать из любого места проекта
+"""
+from data.config import token
+from aiogram import Bot
+from aiogram.dispatcher import Dispatcher
+from aiogram.contrib.fsm_storage.memory import MemoryStorage
 
-if DEBUG:
-    logger = telebot.logger
+#  создаем хранилище в оперативной памяти
+storage = MemoryStorage()
 
-    telebot.logger.setLevel(logging.INFO)
+#  создаем бот, считав ключ API из переменного окружения
+bot = Bot(token=token)
 
-bot = telebot.TeleBot(API_KEY, exception_handler=telebot.ExceptionHandler())
-
-
+#  создаем дистпетчер
+dp = Dispatcher(bot, storage=storage)
