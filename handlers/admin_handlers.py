@@ -55,7 +55,7 @@ async def add_new_product(message: types.Message):
     """Запускает процесс добавления нового товара в БД"""
     if str(message.from_user.id) in admins:
         await FSMProduct.category.set()
-        await message.reply('Выберите пожалуйста категорию⬇️', reply_markup=kb_category)
+        await message.reply('Актуальный прайс на 16.08.2023\nВыберите пожалуйста категорию⬇️', reply_markup=kb_category)
 
 
 async def callback_add_new_product(callback_query: types.CallbackQuery, state: FSMContext):
