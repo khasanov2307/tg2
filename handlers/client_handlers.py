@@ -76,10 +76,10 @@ def register_handlers_client(dp: Dispatcher):
     @dp.callback_query_handler(text="send_location_1")
     async def inline_button1(query: types.CallbackQuery):
         await query.message.edit_text('Владивосток🌊')
-        await query.message.reply_location(48.472124, 135.093027)
+        await query.message.reply_location(43.147833, 131.920276)
 
 
     @dp.callback_query_handler(text="send_location_2")
     async def inline_button1(query: types.CallbackQuery):
         await query.message.edit_text('Хабаровск🏙')
-        await query.message.reply_location(43.147833, 131.920276)
+        await query.message.reply_location(48.464131, 135.113805)
