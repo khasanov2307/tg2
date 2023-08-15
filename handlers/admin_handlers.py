@@ -198,12 +198,19 @@ async def load_photo_timetable(message: types.Message, state: FSMContext):
         await state.finish()
 
 
+async def send_info_for_all_users(callback_query: types.CallbackQuery):
+    read = await sqlite_db.sql_loads_all_users()
+    string = '\n\n'.join(f'{ret[0]}' for ret in read)
+    await bot.send_message(string)
+
+
 #  Регистрация хендлеров------------------------------------------------------------------------------------------------
 def register_handlers_admin(dp: Dispatcher):
     """
         Функция регистратор админских диспетчеров, вызывается из main.py
     """
     dp.register_message_handler(cm_start, commands=['админ'])
+    dp.register_message_handler(send_info_for_all_users, commands=['send'])
     dp.register_message_handler(cancel_handler, state='*', commands='отмена')
     dp.register_message_handler(add_new_product, Text(startswith=['Добавить продукт']), state=None)
     dp.register_callback_query_handler(callback_add_new_product,

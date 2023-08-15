@@ -49,6 +49,10 @@ async def sql_loads_all_products_from_category(category):
     """Возвращает все продукты из категории хлеб которые есть в бд"""
     return cur.execute(f'SELECT * FROM {category}').fetchall()
 
+async def sql_loads_all_users():
+    """Возвращает все продукты из категории хлеб которые есть в бд"""
+    return cur.execute(f'SELECT * FROM users').fetchall()
+
 
 async def sql_loads_all_gallery():
     """Возвращает все значения из галереи которые есть в бд"""
