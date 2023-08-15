@@ -83,7 +83,3 @@ def register_handlers_client(dp: Dispatcher):
     async def inline_button1(query: types.CallbackQuery):
         await query.message.edit_text('Хабаровск🏙')
         await query.message.reply_location(43.147833, 131.920276)
-
-    @dp.callback_query_handler(text="клавиатура")
-    async def commands_back_to(message: types.Message):
-        await message.answer(reply_markup=client_keyboards.kb_client)
