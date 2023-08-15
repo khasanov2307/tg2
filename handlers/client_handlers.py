@@ -44,7 +44,7 @@ async def show_all_products_from_category(callback_query: types.CallbackQuery):
     keyboard.add(types.InlineKeyboardButton(text="Каталог🔙", callback_data="Продукция"))
     category = callback_query.data.replace('show ', '')
     read = await sqlite_db.sql_loads_all_products_from_category(category)
-    string = '\n\n'.join(f'{ret[0]}\nЦена {ret[1]}' for ret in read)
+    string = '\n\n'.join(f'{ret[0]}\nЦена {ret[1]}₽' for ret in read)
     await bot.send_message(callback_query.from_user.id, string + "\n\n", reply_markup=keyboard)
 
 
