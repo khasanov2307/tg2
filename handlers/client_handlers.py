@@ -34,7 +34,7 @@ async def load_contacts(message: types.Message):
 
 async def show_products(message: types.Message):
     """Хендлер для команды 'продукция' отображает категории продукции"""
-    await message.reply('Выберите пожалуйста категорию⬇️', reply_markup=client_keyboards.kb_category_for_show)
+    await message.reply('Актуальный прайс на 16.08.2023\nВыберите пожалуйста категорию⬇️', reply_markup=client_keyboards.kb_category_for_show)
     await message.delete()
 
 
