@@ -198,10 +198,13 @@ async def load_photo_timetable(message: types.Message, state: FSMContext):
         await state.finish()
 
 
-async def send_info_for_all_users(callback_query: types.CallbackQuery):
-    read = await sqlite_db.sql_loads_all_users()
-    string = '\n\n'.join(f'{ret[0]}' for ret in read)
-    await bot.send_message(string)
+async def send_info_for_all_users(message: types.Message, state: FSMContext):
+    if str(message.from_user.id) in admins:
+        read = await sqlite_db.sql_loads_all_users()
+        string = '\n\n'.join(f'{ret[0]}' for ret in read)
+        await bot.send_message(string)
+        await message.answer('!')
+        await state.finish()
 
 
 #  Регистрация хендлеров------------------------------------------------------------------------------------------------
