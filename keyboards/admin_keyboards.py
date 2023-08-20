@@ -3,8 +3,8 @@ from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 
 #  создаем кнопки
-button_add_product = KeyboardButton('Добавить продукт🍞')
-button_add_gallery = KeyboardButton('Добавить в галерею🌅')
+button_add_product = KeyboardButton('Объявление')
+button_add_gallery = KeyboardButton('Выход')
 button_del_product = KeyboardButton('Удалить продукт❌')
 button_del_gallery = KeyboardButton('Удалить из галереи❌')
 button_load_timetable = KeyboardButton('Загрузить расписание🗒')
@@ -12,8 +12,7 @@ button_load_timetable = KeyboardButton('Загрузить расписание�
 kb_admin = ReplyKeyboardMarkup(resize_keyboard=True, one_time_keyboard=True)
 
 #  добавляем кнопки на клавиатуру в строку
-kb_admin.row(button_add_product, button_del_product).row(button_add_gallery, button_del_gallery) \
-    .add(button_load_timetable)
+kb_admin.row(button_add_product, button_add_gallery)
 
 #  callback кнопки для категорий продукции
 kb_category = InlineKeyboardMarkup().add(InlineKeyboardButton('Хлеб🍞', callback_data='bread')). \

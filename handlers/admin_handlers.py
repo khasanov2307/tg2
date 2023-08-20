@@ -1,9 +1,13 @@
 """Админские диспетчеры"""
+import asyncio
+
+import aiogram
 from aiogram import types, Dispatcher
 from data.config import admins
+from keyboards import client_keyboards
 from keyboards.admin_keyboards import kb_admin, kb_category, kb_category_for_del_product
 from aiogram.dispatcher.filters.state import State, StatesGroup
-from aiogram.dispatcher.filters import Text
+from aiogram.dispatcher.filters import Text, state
 from aiogram.dispatcher import FSMContext
 from loader import bot
 from data import sqlite_db
@@ -11,6 +15,11 @@ from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 
 
 #  Классы машин состояний ----------------------------------------------------------------------------------------------
+class UsersInfo(StatesGroup):
+    info = State()
+    cancel = State()
+
+
 class FSMProduct(StatesGroup):
     """Класс машины состояний для добавления товаров"""
     category = State()  # состояние для категории
@@ -37,6 +46,9 @@ async def cm_start(message: types.Message):
     if str(message.from_user.id) in admins:
         await message.reply('Привет, админ :D', reply_markup=kb_admin)
 
+
+async def main_menu(message: types.Message):
+    await message.reply('Главное меню', reply_markup=client_keyboards.kb_client)
 
 async def cancel_handler(message: types.Message, state: FSMContext):
     """Выход из машины состояния если пользователь передумал"""
@@ -198,13 +210,11 @@ async def load_photo_timetable(message: types.Message, state: FSMContext):
         await state.finish()
 
 
-async def send_info_for_all_users(message: types.Message, state: FSMContext):
+async def send_info_for_all_users(message: types.Message):
     if str(message.from_user.id) in admins:
-        read = await sqlite_db.sql_loads_all_users()
-        string = '\n\n'.join(f'{ret[0]}' for ret in read)
-        await bot.send_message(string)
-        await message.answer('!')
-        await state.finish()
+        await bot.send_message(message.from_user.id, text='Введите текст объявления ⬇⬇⬇')
+        await UsersInfo.info.set()
+        await state.reset_state(with_data=False)
 
 
 #  Регистрация хендлеров------------------------------------------------------------------------------------------------
@@ -213,9 +223,11 @@ def register_handlers_admin(dp: Dispatcher):
         Функция регистратор админских диспетчеров, вызывается из main.py
     """
     dp.register_message_handler(cm_start, commands=['админ'])
-    dp.register_message_handler(send_info_for_all_users, commands=['send'])
+    #dp.register_message_handler(send_info_for_all_users, commands=['send'])
     dp.register_message_handler(cancel_handler, state='*', commands='отмена')
-    dp.register_message_handler(add_new_product, Text(startswith=['Добавить продукт']), state=None)
+    #dp.register_message_handler(add_new_product, Text(startswith=['Добавить продукт']), state=None)
+    dp.register_message_handler(send_info_for_all_users, Text(startswith=['Объявление']), state=None)
+    dp.register_message_handler(main_menu, Text(startswith=['Выход']), state=None)
     dp.register_callback_query_handler(callback_add_new_product,
                                        lambda x: x.data == 'bread' or x.data == 'buns' or x.data == 'other',
                                        state=FSMProduct.category)
@@ -235,3 +247,14 @@ def register_handlers_admin(dp: Dispatcher):
                                        lambda x: x.data.startswith('del_product'))
     dp.register_message_handler(add_new_timetable, Text(startswith=['Загрузить расписание']), state=None)
     dp.register_message_handler(load_photo_timetable, content_types=['photo'], state=FSMTimetable.photo)
+
+    @dp.message_handler(state=UsersInfo.info)
+    async def info(message: types.Message):
+        info = message.text
+        read = await sqlite_db.sql_loads_all_users()
+        for ret in read:
+            try:
+                await bot.send_message(f'{ret[0]}', text=info)
+                await asyncio.sleep(1)
+            except aiogram.utils.exceptions.ChatNotFound:
+                read.remove(ret)
