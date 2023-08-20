@@ -2,6 +2,8 @@
 from random import randint
 
 from aiogram import types, Dispatcher
+
+from data.sqlite_db import create_profile
 from keyboards import client_keyboards
 from aiogram.dispatcher.filters import Text
 from data import sqlite_db
@@ -13,6 +15,9 @@ async def commands_start(message: types.Message):
     """Приветственный хендлер для команд start и help"""
     #  отдаем клавиатуру при команде /start или /help
     await message.answer('Привет! Это бот Амур Хорека!', reply_markup=client_keyboards.kb_client)
+    user_id = message.from_user.id
+    #print(user_id)
+    await create_profile(user_id=user_id)
 
 
 async def load_address(callback_query: types.CallbackQuery):

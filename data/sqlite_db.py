@@ -78,3 +78,11 @@ async def sql_delete_from_gallery(description):
     """Удаление элемента из галереи"""
     cur.execute('DELETE FROM gallery WHERE description == ?', (description,))
     base.commit()
+
+async def create_profile(user_id):
+    user = cur.execute("SELECT 1 FROM users WHERE id == '{key}'".format(key=user_id)).fetchone()
+    print(user_id)
+    if not user:
+        print(user_id)
+        cur.execute("INSERT INTO users VALUES(?)", (user_id,))
+    base.commit()
