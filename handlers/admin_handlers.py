@@ -6,7 +6,6 @@ from aiogram import types, Dispatcher
 from aiogram.utils.exceptions import BotBlocked
 
 from data.config import admins
-from data.sqlite_db import count_users
 from keyboards import client_keyboards
 from keyboards.admin_keyboards import kb_admin, kb_category, kb_category_for_del_product
 from aiogram.dispatcher.filters.state import State, StatesGroup
