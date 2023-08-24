@@ -3,7 +3,10 @@ import asyncio
 
 import aiogram
 from aiogram import types, Dispatcher
+from aiogram.utils.exceptions import BotBlocked
+
 from data.config import admins
+from data.sqlite_db import count_users
 from keyboards import client_keyboards
 from keyboards.admin_keyboards import kb_admin, kb_category, kb_category_for_del_product
 from aiogram.dispatcher.filters.state import State, StatesGroup
@@ -216,6 +219,10 @@ async def send_info_for_all_users(message: types.Message):
         await UsersInfo.info.set()
         await state.reset_state(with_data=False)
 
+async def send_count(message: types.Message):
+    if str(message.from_user.id) in admins:
+        count = await count_users()
+        await bot.send_message(message.from_user.id, text=count)
 
 #  Регистрация хендлеров------------------------------------------------------------------------------------------------
 def register_handlers_admin(dp: Dispatcher):
@@ -227,6 +234,7 @@ def register_handlers_admin(dp: Dispatcher):
     dp.register_message_handler(cancel_handler, state='*', commands='отмена')
     #dp.register_message_handler(add_new_product, Text(startswith=['Добавить продукт']), state=None)
     dp.register_message_handler(send_info_for_all_users, Text(startswith=['Объявление']), state=None)
+    dp.register_message_handler(send_count, Text(startswith=['Количество пользователей']), state=None)
     dp.register_message_handler(main_menu, Text(startswith=['Выход']), state=None)
     dp.register_callback_query_handler(callback_add_new_product,
                                        lambda x: x.data == 'bread' or x.data == 'buns' or x.data == 'other',
@@ -258,3 +266,5 @@ def register_handlers_admin(dp: Dispatcher):
                 await asyncio.sleep(1)
             except aiogram.utils.exceptions.ChatNotFound:
                 read.remove(ret)
+            except BotBlocked:
+                await asyncio.sleep(1)
