@@ -3,7 +3,7 @@ import asyncio
 
 import aiogram
 from aiogram import types, Dispatcher
-from aiogram.utils.exceptions import BotBlocked
+from aiogram.utils.exceptions import BotBlocked, UserDeactivated
 
 from data.config import admins
 from keyboards import client_keyboards
@@ -262,4 +262,8 @@ def register_handlers_admin(dp: Dispatcher):
             except aiogram.utils.exceptions.ChatNotFound:
                 read.remove(ret)
             except BotBlocked:
+                await asyncio.sleep(1)
+            except UserDeactivated:
+                await asyncio.sleep(1)
+            except:
                 await asyncio.sleep(1)
