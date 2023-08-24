@@ -219,10 +219,6 @@ async def send_info_for_all_users(message: types.Message):
         await UsersInfo.info.set()
         await state.reset_state(with_data=False)
 
-async def send_count(message: types.Message):
-    if str(message.from_user.id) in admins:
-        count = await count_users()
-        await bot.send_message(message.from_user.id, text=count)
 
 #  Регистрация хендлеров------------------------------------------------------------------------------------------------
 def register_handlers_admin(dp: Dispatcher):
