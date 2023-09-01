@@ -42,14 +42,16 @@ inline_btn_16 = InlineKeyboardButton('Растения&Грибы', callback_dat
 inline_btn_17 = InlineKeyboardButton('Рис', callback_data='show Рис')
 inline_btn_18 = InlineKeyboardButton('Рыба ПСГ, ПБГ, С/М', callback_data='show РыбаПСГ')
 inline_btn_19 = InlineKeyboardButton('Рыба ФИЛЕ СВЕЖЕМОРОЖЕННОЕ', callback_data='show РыбаФиле')
+inline_btn_20 = InlineKeyboardButton('Рыба ФИЛЕ СЛАБОСОЛЕНОЕ', callback_data='show РыбаСл')
 #inline_btn_20 = InlineKeyboardButton('Главное меню⬇', callback_data='клавиатура')
 inline_btn_21 = InlineKeyboardButton('Соевый&Уксус', callback_data='show Соевый')
 inline_btn_22 = InlineKeyboardButton('Соусы&Кетчупы', callback_data='show Соусы')
 inline_btn_23 = InlineKeyboardButton('Соусы паназиатские', callback_data='show СоусыАзия')
 inline_btn_24 = InlineKeyboardButton('Сыр&Майонез', callback_data='show СырМайонез')
-inline_btn_25 = InlineKeyboardButton('Ягоды&Овощи&Заморозка', callback_data='show ЯгодыОвощи')
+inline_btn_25 = InlineKeyboardButton('Томаты&Консервация', callback_data='show ТоматыКонсервация')
+inline_btn_26 = InlineKeyboardButton('Ягоды&Овощи&Заморозка', callback_data='show ЯгодыОвощи')
 kb_category_for_show.add(inline_btn_1, inline_btn_2, inline_btn_3, inline_btn_4, inline_btn_5, inline_btn_6,
                          inline_btn_7, inline_btn_8, inline_btn_9, inline_btn_10, inline_btn_11, inline_btn_12,
                          inline_btn_13, inline_btn_14, inline_btn_15, inline_btn_16, inline_btn_17, inline_btn_18,
-                         inline_btn_19, inline_btn_21, inline_btn_22, inline_btn_23, inline_btn_24,
-                         inline_btn_25)
+                         inline_btn_19, inline_btn_20, inline_btn_21, inline_btn_22, inline_btn_23, inline_btn_24,
+                         inline_btn_25, inline_btn_26)
